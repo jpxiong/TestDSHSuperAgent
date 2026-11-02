@@ -1,8 +1,25 @@
 # TestDSHSuperAgent
 
-[DSH SuperAgent](https://github.com/deepseek-ai/deepseek-harness) 的端到端测试仓库。DSH SuperAgent 是 DeepSeek Harness（DSH）中负责接收任务、调度工作区并交付改动的自动化代理。
+本仓库是 [DSH SuperAgent](https://github.com/deepseek-ai/deepseek-harness) 的端到端测试仓库，用于验证 DSH SuperAgent 的各项特性。DSH SuperAgent 是 DeepSeek Harness（DSH）中负责接收任务、调度工作区并交付改动的自动化代理。
 
 本仓库不承载业务代码，专门用来演练和验证「GitHub 任务 → 隔离工作区 → 分支提交 → Pull Request → 人工合并」的完整链路，让接入、调度与交付流程可以在不影响真实项目的前提下反复测试。
+
+## 验证的 DSH SuperAgent 特性
+
+本仓库是 DSH SuperAgent 的功能验证沙盒：每个特性对应一条可重复执行的端到端流程，验证结果以提交和 PR 的形式留痕，便于回归测试和人工复核。
+
+| 验证项 | 验证方式 | 期望结果 |
+| --- | --- | --- |
+| 仓库接入与任务触发 | 向 DSH SuperAgent 下发一个针对本仓库的任务（如更新 README） | Agent 能识别任务、定位仓库并开始执行 |
+| 隔离工作区 | 观察任务执行时使用的分支 / worktree | 每个任务在独立工作区执行，互不影响 |
+| 文档与代码修改 | 让 Agent 按约定修改 README 或最小示例 | 改动范围可控，内容符合任务要求 |
+| 自动提交 | 检查任务产生的 commit | 提交信息清晰，只包含本次任务的改动 |
+| PR 创建与描述 | 检查自动创建的 PR 的 base/head、标题和正文 | PR 可直接 review，正文说明改动内容与验证方式 |
+| 自动化标注 | 检查 PR 正文或评论 | 明确标注由自动化 agent 创建，便于与人工操作区分 |
+| 人工审核与合并 | 由人工 review 后手动合并或关闭 PR | 流程闭环，不启用 auto-merge |
+| 多任务并行 | 同时下发多个互不依赖的文档任务 | 各任务分支独立，互不覆盖 |
+
+> 本仓库只承载文档和最小示例，目的是让每次验证的 diff 足够小、结果足够直观，不用于验证业务功能或性能。
 
 ## 项目用途
 
